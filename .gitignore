@@ -1,0 +1,9 @@
+# Sensitive config (contains sendkeys)
+config.yaml
+
+# Runtime data
+data/
+logs/
+__pycache__/
+*.pyc
+.venv/

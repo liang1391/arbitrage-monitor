@@ -1,0 +1,79 @@
+# ═══════════════════════════════════════════════
+# 闲鱼套利监控 — 配置文件（示例）
+# ═══════════════════════════════════════════════
+#
+# 使用方法：
+#   本地运行：复制为 config.yaml 并填入真实 SendKey
+#   GitHub Actions：SendKey 通过 WECHAT_SENDKEYS 环境变量注入，无需修改此文件
+
+# ── 数据源 ─────────────────────────────────
+sources:
+  smzdm:
+    enabled: true
+    poll_interval_sec: 300
+    scrolls: 8
+    request_delay: 2.0
+    channels: ["youhui", "baicai"]
+    target_platforms: ["拼多多", "淘宝", "抖音", "美团", "得物"]
+
+# ── 过滤规则 ─────────────────────────────────
+filters:
+  keywords:
+    - "耳机"
+    - "键盘"
+    - "鼠标"
+    - "显示器"
+    - "充电宝"
+    - "数据线"
+    - "零食"
+    - "牛奶"
+    - "纸巾"
+    - "洗发水"
+    - "沐浴露"
+    - "牙膏"
+    - "洗衣液"
+    - "手机壳"
+    - "钢化膜"
+    - "USB"
+    - "路由器"
+    - "插座"
+    - "电池"
+    - "台灯"
+    - "咖啡"
+    - "薯片"
+    - "洗衣"
+    - "沐浴"
+  min_worthy_ratio: 60
+  min_worthy_count: 0
+  min_discount_pct: 45
+
+# ── 价格阈值 ─────────────────────────────────
+price_thresholds:
+  global_max: 30
+  keywords:
+    "耳机": 200
+    "键盘": 300
+    "鼠标": 200
+    "显示器": 800
+    "路由器": 200
+
+# ── 推送通道 ─────────────────────────────────
+alerts:
+  wechat:
+    enabled: true
+    # SendKey 通过 WECHAT_SENDKEYS 环境变量设置（逗号分隔多个）
+    # 本地运行请在 config.yaml 中直接填写
+    sendkey: ""
+  desktop:
+    enabled: false  # 云端运行，桌面通知无效
+
+# ── 去重设置 ─────────────────────────────────
+dedup:
+  cooldown_sec: 86400
+  db_path: "data/deals.db"
+  price_drop_pct: 5
+
+# ── 日志 ────────────────────────────────────
+logging:
+  level: "INFO"
+  file: ""
