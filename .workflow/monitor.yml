@@ -1,28 +1,21 @@
-# ⚠️ Gitee Go 无法运行 Playwright（需要浏览器环境）
-# 此文件仅作参考，实际请使用 Windows 任务计划程序本地运行
-#
-# 本地运行方式：
-#   常驻监控：python monitor.py
-#   单次运行：python monitor.py --once
-#   Windows 计划任务：
-#     schtasks /Create /SC MINUTE /MO 10 /TN "ArbitrageMonitor" /TR "python C:\Users\ZhuanZ\arbitrage-monitor\monitor.py --once"
-#
-# 如需云端运行，请使用 GitHub Actions (ubuntu-latest + Playwright)
-#
 version: '1.0'
-name: arbitrage-monitor-disabled
-displayName: 闲鱼套利监控（需浏览器，不支持GiteeGo）
+name: arbitrage-monitor
+displayName: 套利监控（RSS模式·每15分钟）
 triggers:
-  trigger: manual  # 仅手动触发
+  trigger: schedule
+  schedule:
+    # 每15分钟（北京时间 8:00-23:59）
+    cron: '*/15 0-15 * * *'
 
 stages:
   - name: monitor
-    displayName: 抓取并推送好价
+    displayName: 抓取好价并推送微信
     steps:
       - step: build@python
         name: run-monitor
-        displayName: 运行监控脚本
+        displayName: 运行监控
         pythonVersion: '3.12'
         commands:
-          - echo "Playwright requires a browser - use local Windows Task Scheduler instead"
-          - echo "Run locally: python monitor.py --once"
+          - pip install requests feedparser pyyaml
+          - export WECHAT_SENDKEYS="$WECHAT_SENDKEYS"
+          - python monitor.py --once --config config.example.yaml
